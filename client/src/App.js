@@ -14,14 +14,18 @@ import TableCell from '@mui/material/TableCell';
 // npm install @mui/styles
 // npm install @mui/material @emotion/react @emotion/styled
 
-//const customers = []
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 class App extends Component {
   state = {
-    customers:""
+    customers:"",
+    completed:0
   }
 
   componentDidMount() {
+    this.timer = setInterval(this.progress, 20);
     this.callApi()
       .then(res => this.setState({customers: res}))
       .catch(err => console.log(err));
@@ -31,6 +35,11 @@ class App extends Component {
     const response = await fetch('/api/customers');
     const body = await response.json();
     return body;
+  }
+
+  progress = () => {
+    const {completed} = this.state;
+    this.setState({completed : completed >- 100 ? 0 : completed +1});
   }
 
   render() {
@@ -54,7 +63,15 @@ class App extends Component {
           
             { this.state.customers ? this.state.customers.map(c => {
               return ( <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job}  /> );
-            }) : "" }
+            }) : 
+            <TableRow>
+              <TableCell colSpan="6" align='center'>
+              {/* <CircularProgress variant="determinate" value={progress} /> */}
+              <CircularProgress variant="indeterminate" value={this.state.completed} />
+              {/* LOADING !!!!! */}
+              </TableCell>
+            </TableRow>
+            }
           
           </TableBody>
         </Table>
