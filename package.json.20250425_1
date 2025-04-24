@@ -1,0 +1,28 @@
+{
+    "name" :"manangement",
+    "version" : "1.0.0",
+    "scripts": {
+        "client" : "cd client && npm start",
+        "server" : "nodemon server.js",
+        "dev" : "concurrently --kill-others-onfail \"npm server\" \"npm server\" "
+    },
+    "dependencies": {
+        //"body-parser": "^1.18.3",
+        //"express": "^4.16.4"
+
+        "body-parser": "^1.20.3",
+        "express": "^4.21.2",
+        "nodemon": "^3.1.10"        
+    },
+    "devDependencies": {
+        "concurrently": "4.0.1"
+
+    }
+
+    // 7강. 설치과정. 
+    // 7강 - Node.js Express 서버 개발환경 구축하기
+    // npm install nodemon body-parser express 터미널에서 실행해야 함. 
+    // 이 주석이 남아있으면 에러 남.
+
+
+}
