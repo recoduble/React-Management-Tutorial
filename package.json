@@ -4,11 +4,14 @@
     "scripts": {
         "client": "cd client && npm start",
         "server": "nodemon server.js",
-        "dev": "concurrently --kill-others-onfail \"npm server\" \"npm server\" "
+        "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
     },
     "dependencies": {
         "body-parser": "^1.20.3",
         "express": "^4.21.2",
         "nodemon": "^3.1.10"
+    },
+    "devDependencies": {
+        "concurrently": "^9.1.2"
     }
 }
