@@ -17,24 +17,46 @@ const connection = mysql.createConnection({
     password: conf.password,
     port: conf.port,
     database: conf.database
-})
+});
+connection.connect();
+
+const multer = require('multer');
+const upload = multer({dest: './upload'})
 
 app.get('/api/hello', (req, res) => {
     res.send({message: 'hello Express!!!!'});
-})
+});
 
 app.get('/api/customers', (req, res) => {
     connection.query(
-        "SELECT * FROM CUSTOMER",
+        "SELECT * FROM CUSTOMER order by 1 desc limit 5",
         (err, rows, fields) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send({ error: 'Database query failed' });
-                return;
-            }            
             res.send(rows);
+            // if (err) {
+            //     console.error(err);
+            //     res.status(500).send({ error: 'Database query failed' });
+            //     return;
+            // }                
         }
     );
+});
+
+app.use('/image', express.static('./upload'));
+
+app.post('/api/customers', upload.single('image'), (req,res) => {
+    let sql = 'insert into CUSTOMER values (null, ?, ?, ?, ?, ?)';
+    let image = '/image/' + req.file.filename;
+    let name = req.body.name;
+    let birthday = req.body.birthday;
+    let gender = req.body.gender;
+    let job = req.body.job;
+    let params = [image, name, birthday, gender, job];
+    console.log(params);
+    connection.query(sql, params, (err, rows, fileds) => {
+        res.send(rows);
+        console.log(err);
+        console.log(rows);
+    })
 })
 
 app.listen(port, () => console.log(`Listening on  port ${port}`));

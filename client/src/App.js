@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import Customer from './components/Customer';
+import CustomerAdd from './components/CustomerAdd';
 
 import './App.css';
 import Paper from '@mui/material/Paper';
@@ -19,16 +20,35 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 
 class App extends Component {
-  state = {
-    customers:"",
-    completed:0
+  // state = {
+  //   customers:"",
+  //   completed:0
+  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      //customers: '',
+      customers: [],
+      completed: 0      
+    }
+  }
+
+  stateRefresh = () => {
+    this.setState ({
+      //customers: '',
+      customers: [],
+      completed: 0
+    });
+    this.callApi()
+        .then(res => this.setState({customers: res}))
+        .catch(err => console.log(err));    
   }
 
   componentDidMount() {
     this.timer = setInterval(this.progress, 20);
     this.callApi()
-      .then(res => this.setState({customers: res}))
-      .catch(err => console.log(err));
+        .then(res => this.setState({customers: res}))
+        .catch(err => console.log(err));
   }
 
   callApi = async () => {
@@ -39,13 +59,13 @@ class App extends Component {
 
   progress = () => {
     const {completed} = this.state;
-    this.setState({completed : completed >- 100 ? 0 : completed +1});
+    this.setState({completed : completed >= 100 ? 0 : completed +1});
   }
 
   render() {
     const {classes} = this.props;
     return (
-      // <Paper className={classes.root}>
+      <div>
       <Paper sx={{ width: "100%", mt: 3, overflowX: "auto" }}>
         {/* <Table className={classes.table}> */}
         <Table sx={{ minWidth: 1080 }}>
@@ -62,7 +82,10 @@ class App extends Component {
           <TableBody>
           
             { this.state.customers ? this.state.customers.map(c => {
+              // name={c.NAME} 이 맞음.
               return ( <Customer key={c.id} id={c.id} image={c.image} name={c.NAME} birthday={c.birthday} gender={c.gender} job={c.job}  /> );
+              //return ( <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job}  /> );
+
             }) : 
             <TableRow>
               <TableCell colSpan="6" align='center'>
@@ -76,6 +99,8 @@ class App extends Component {
           </TableBody>
         </Table>
       </Paper>
+      <CustomerAdd stateRefresh={this.stateRefresh}/>
+      </div>
     );
   }
 }
