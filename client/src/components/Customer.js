@@ -4,6 +4,8 @@ import React from 'react';
 // npm install @mui/material @emotion/react @emotion/styled
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import { Tab } from '@mui/material';
+import CustomerDelete from './CustomerDelete';
 
 class Customer extends React.Component {
     render() {
@@ -19,6 +21,7 @@ class Customer extends React.Component {
                 <TableCell>{this.props.birthday}</TableCell>
                 <TableCell>{this.props.gender}</TableCell>
                 <TableCell>{this.props.job}</TableCell>
+                <TableCell><CustomerDelete stateRefresh={this.props.stateRefresh} id={this.props.id} /></TableCell>
             </TableRow>
         )
     }
